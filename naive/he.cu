@@ -1,10 +1,21 @@
 #include <cuda.h>
 #include <stdio.h>
+
+#define CHECK_CUDA(call) \
+do { \
+    cudaError_t err = call; \
+    if (err != cudaSuccess) { \
+        printf("CUDA error at %s:%d - %s\n", __FILE__, __LINE__, cudaGetErrorString(err)); \
+        exit(EXIT_FAILURE); \
+    } \
+} while (0)
+
 __global__ void printHello()
 {
     int index = threadIdx.x + blockIdx.x * blockDim.x; // 计算全局索引
     printf("hello world from GPU by thread:%d\n", index);
 }
+
 int main()
 {
     dim3 grid_dim = {1, 1, 1};             // 设置线程网格
@@ -13,6 +24,6 @@ int main()
     // int num_blocks = 1;                    // 如果仅仅使用一维线程网格，可以直接指定线程块数目
     // int BLOCK_DIM = 4;                     // 如果仅仅使用一维线程网格，可以直接指定每个线程块的线程数目
     // printHello<<<num_blocks, BLOCK_DIM>>>();
-    cudaDeviceSynchronize(); // 如果没有这一行，无法执行打印过程
+    CHECK_CUDA(cudaDeviceSynchronize()); // 如果没有这一行，无法执行打印过程
     return 0;
 }
