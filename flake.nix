@@ -32,10 +32,12 @@
             cudatoolkit
             cuda_nvcc
             cuda_cudart
+            cuda_nvprof
           ]);
 
           CUDA_PATH = pkgs.cudatoolkit;
-          LD_LIBRARY_PATH = "/run/opengl-driver/lib:/run/opengl-driver-32/lib";
+          # https://github.com/NixOS/nixpkgs/issues/342553
+          LD_LIBRARY_PATH = "/run/opengl-driver/lib:/run/opengl-driver-32/lib:${pkgs.cudaPackages.cuda_nvprof.lib}/lib";
         };
       });
 }
