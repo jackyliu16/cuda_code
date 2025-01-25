@@ -110,7 +110,7 @@ __global__ void matrixKernel1st(float *dA, float *dB, float *dC, int M, int K, i
     }
 }
 template <int BM, int BN, int BK, int TM, int TN>
-__global__ void matrixKernel2nd(float *dA, float *dB, float *dC, int M, int K, int N)
+__global__ void matrixKernel2nd(float *dA, float *dB, float *dC, int M, int K, int N) // bank conflict
 {
     __shared__ float SA[BM * BK];
     __shared__ float SB[BK * BN];
